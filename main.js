@@ -12,6 +12,7 @@ var rd;
 var funct3;
 var opcode;
 var inmediate;
+var bandera_negativo=false;
 //000000=add, 0100000=sub , funct3 =000, opcode = 0110011 mismos en add ysub ,inmediate ld, funct 3 =011, 
 boton.addEventListener('click', () => {
     validarEntrada();
@@ -77,6 +78,7 @@ function buscar_etiquetas(todas_instrucciones,etiqueta_buscada,pos_actual) {
         if(num>15 && num<32){
             pos=32-num;
         }
+        bandera_negativo=true;
     }
     return pos;
 }
@@ -125,23 +127,37 @@ function functionbeq(codigo,pos) {
                var inm= buscar_etiquetas(arreglo_arreglos,parte,pos);
                console.log("INM BEQ:",inm);
                 cincob=convert(inm,10,2);
-               bin = concatenarCeros(inm, cincob);
+                if(bandera_negativo==true){
+                    //rellenar de 1 si es menor de 5 bits
+                    bin= String(cincob).padStart(5, '1');
+                }else{
+                    bin = concatenarCeros(inm, cincob);
+                }
+              
                console.log(bin);
                 bit = bin.length - 5;
                inmediate1 = bin.slice(bit, bin.length);
                inmediate2 = bin.slice(0, bit);
                console.log(inmediate1);
-               console.log(inmediate2);
+             
 
             }
         }
        
         i += 1;
     }
+    if(bandera_negativo==true){
+        inmediate = String(inmediate2).padStart(7, '1');
+        console.log(inmediate);
+    }else{
+     
+        inmediate = String(inmediate2).padStart(7, '0');
+        console.log(inmediate);
+    }
     
-    inmediate = String(inmediate2).padStart(7, '0');
     funct3 = Arreglo_formato[2];//000 en funct3 para la instruccion en beq
     opcode = Arreglo_formato[7];//opcode de la instruccion beq 
+    bandera_negativo=false;
     return binario = inmediate + rs2 + rs1 + funct3 + inmediate1 + opcode;
 }
   
@@ -175,7 +191,12 @@ function funcionbne(codigo,pos) {
                 //Caso en el que el salto esta dado como un numero:
                 if (num==3) {
                     cincob=convert(parte,10,2);
-                    bin = concatenarCeros(parte, cincob);
+                    if(bandera_negativo==true){
+                        //rellenar de 1 si es menor de 5 bits
+                        bin= String(cincob).padStart(5, '1');
+                    }else{
+                        bin = concatenarCeros(inm, cincob);
+                    }
                     console.log(bin);
                     bit = bin.length - 5;
                     inmediate1 = bin.slice(bit, bin.length);
@@ -204,11 +225,19 @@ function funcionbne(codigo,pos) {
        
         i += 1;
     }
+   
+    if(bandera_negativo==true){
+        inmediate = String(inmediate2).padStart(7, '1');
+        console.log(inmediate);
+    }else{
+     
+        inmediate = String(inmediate2).padStart(7, '0');
+        console.log(inmediate);
+    }
     
-    inmediate = String(inmediate2).padStart(7, '0');
-    console.log(inmediate);
     funct3 = Arreglo_formato[8];//001 en funct3 para la instruccion en bne
-    opcode = Arreglo_formato[7];//opcode de la instruccion bne 
+    opcode = Arreglo_formato[7];//opcode de la instruccion bne
+    bandera_negativo=false; 
     return binario = inmediate + rs2 + rs1 + funct3 + inmediate1 + opcode;
 }
 
@@ -242,9 +271,16 @@ function funcionJal(codigo1,pos) {
                var inm= buscar_etiquetas(arreglo_arreglos,parte,pos);
                console.log("INM BEQ:",inm);
                 cincob=convert(inm,10,2);
-               bin = concatenarCeros(inm, cincob);
+                if(bandera_negativo==true){
+                      bin= String(cincob).padStart(5, '1');
+                      inmediate=String(bin).padStart(20, '1');
+                }else{
+                    bin = concatenarCeros(inm, cincob);
+                    inmediate = String(bin).padStart(20, '0');
+                }
+              
                console.log(bin);
-               inmediate = String(bin).padStart(20, '0');
+              
                console.log(inmediate);
                
 
@@ -255,6 +291,7 @@ function funcionJal(codigo1,pos) {
         i += 1;
     }
     opcode = Arreglo_formato[9];
+    bandera_negativo=false;
     return binario = inmediate + rd + opcode;
 }
 
