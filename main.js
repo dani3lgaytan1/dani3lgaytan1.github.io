@@ -206,13 +206,14 @@ function funcionbne(codigo,pos) {
                 console.log(parte);
                var inm= buscar_etiquetas(arreglo_arreglos,parte,pos);//numero inmediate
                console.log("INM BEQ:",inm);
+               cincob=convert(inm,10,2);
                if(bandera_negativo==true){
                 //rellenar de 1 si es menor de 5 bits
                 bin= String(cincob).padStart(5, '1');
             }else{
                 bin = concatenarCeros(inm, cincob);
             }
-               console.log(bin);
+                console.log(bin);
                 bit = bin.length - 5;
                inmediate1 = bin.slice(bit, bin.length);
                inmediate2 = bin.slice(0, bit);
