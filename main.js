@@ -191,12 +191,7 @@ function funcionbne(codigo,pos) {
                 //Caso en el que el salto esta dado como un numero:
                 if (num==3) {
                     cincob=convert(parte,10,2);
-                    if(bandera_negativo==true){
-                        //rellenar de 1 si es menor de 5 bits
-                        bin= String(cincob).padStart(5, '1');
-                    }else{
-                        bin = concatenarCeros(inm, cincob);
-                    }
+                    bin = concatenarCeros(parte, cincob);
                     console.log(bin);
                     bit = bin.length - 5;
                     inmediate1 = bin.slice(bit, bin.length);
@@ -211,8 +206,12 @@ function funcionbne(codigo,pos) {
                 console.log(parte);
                var inm= buscar_etiquetas(arreglo_arreglos,parte,pos);//numero inmediate
                console.log("INM BEQ:",inm);
-                cincob=convert(inm,10,2);
-               bin = concatenarCeros(inm, cincob);
+               if(bandera_negativo==true){
+                //rellenar de 1 si es menor de 5 bits
+                bin= String(cincob).padStart(5, '1');
+            }else{
+                bin = concatenarCeros(inm, cincob);
+            }
                console.log(bin);
                 bit = bin.length - 5;
                inmediate1 = bin.slice(bit, bin.length);
